@@ -69,9 +69,16 @@ public class FeedAdapter extends BaseAdapter {
         vh.titleTv.setText(currentRowFeed.getTitle());
         vh.descriptionTv.setText(currentRowFeed.getDescription());
 
-        // We use picasso for background image download and cache
-        Picasso.with(view.getContext()).load(currentRowFeed.getImageHref()).into(vh.imageIv);
+        // If there is no ImageHref, we hide the ImageView to adjust the Row to the corresponding
+        // height
+        if (currentRowFeed.getImageHref() == null) {
+            vh.imageIv.setVisibility(View.GONE);
+        } else {
+            vh.imageIv.setVisibility(View.VISIBLE);
 
+            // We use picasso for background image download and cache
+            Picasso.with(view.getContext()).load(currentRowFeed.getImageHref()).into(vh.imageIv);
+        }
         return view;
     }
 

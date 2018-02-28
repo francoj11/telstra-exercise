@@ -4,6 +4,7 @@ package ar.com.francojaramillo.telstraexercise.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,10 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
     // The ListView that shows the feed
     @BindView(R.id.feed_lv) ListView feedLv;
 
-    // The progress indicator
-    @BindView(R.id.progres_indicator_pb) ProgressBar progressIndicatorPb;
-
     // The error information TextView
     @BindView(R.id.error_tv) TextView errorTV;
+
+    @BindView(R.id.refresh_layout) SwipeRefreshLayout refreshLayout;
 
     /**
      * Constructor
@@ -75,6 +75,14 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
             // Initialization of the FeedPresenter
             iFeedPresenter = new FeedPresenterImpl(this);
             iFeedPresenter.getFeed();
+
+            // We set the pull to refresh listener to call again for the feed
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    iFeedPresenter.getFeed();
+                }
+            });
         }
 
         return rootView;
@@ -102,13 +110,13 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
 
     @Override
     public void showLoading() {
-        progressIndicatorPb.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(true);
         feedLv.setVisibility(View.GONE);
     }
 
     @Override
     public void hideLoading() {
-        progressIndicatorPb.setVisibility(View.GONE);
+        refreshLayout.setRefreshing(false);
         feedLv.setVisibility(View.VISIBLE);
     }
 
@@ -126,7 +134,7 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
     @Override
     public void onErrorFeed() {
         feedLv.setVisibility(View.GONE);
-        progressIndicatorPb.setVisibility(View.GONE);
+        refreshLayout.setRefreshing(false);
         errorTV.setVisibility(View.VISIBLE);
     }
 
