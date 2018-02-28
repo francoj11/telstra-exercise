@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ar.com.francojaramillo.telstraexercise.ui.fragments.FeedFragment">
+
+    <ListView
+        android:id="@+id/feed_lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+    <ProgressBar
+        android:id="@+id/progres_indicator_pb"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</FrameLayout>
