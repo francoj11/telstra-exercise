@@ -2,6 +2,7 @@ package ar.com.francojaramillo.telstraexercise.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import ar.com.francojaramillo.telstraexercise.R;
@@ -24,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements FeedFragment.NewT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // If there is no savedInstanceState we add a New Fragment. In this way, if there was a
+        // savedInstanceState, the fragment will preserve its state because it uses the flag
+        // "retainInstance"
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
                     FeedFragment.newInstance(), null).commit();

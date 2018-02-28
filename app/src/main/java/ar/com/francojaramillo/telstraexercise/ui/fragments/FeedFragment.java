@@ -29,6 +29,7 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
     // Listener for when a new title arrives
     private NewTitleListener mNewTitleListener;
 
+    private View rootView;
     // The ListView that shows the feed
     @BindView(R.id.feed_lv) ListView feedLv;
 
@@ -45,6 +46,10 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
      */
     public static FeedFragment newInstance() {
         FeedFragment fragment = new FeedFragment();
+
+        // We retain the instance of this fragment to not loose any pending transaction
+        fragment.setRetainInstance(true);
+
         return fragment;
     }
 
@@ -56,14 +61,17 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        // Initialization of butterknife
-        ButterKnife.bind(this,rootView);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        // Initialization of the FeedPresenter
-        iFeedPresenter = new FeedPresenterImpl(this);
-        iFeedPresenter.getFeed();
+            // Initialization of butterknife
+            ButterKnife.bind(this, rootView);
+
+            // Initialization of the FeedPresenter
+            iFeedPresenter = new FeedPresenterImpl(this);
+            iFeedPresenter.getFeed();
+        }
 
         return rootView;
     }
