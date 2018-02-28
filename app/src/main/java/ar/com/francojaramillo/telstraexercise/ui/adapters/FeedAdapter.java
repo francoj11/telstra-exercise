@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import ar.com.francojaramillo.telstraexercise.R;
@@ -66,8 +68,9 @@ public class FeedAdapter extends BaseAdapter {
         RowFeed currentRowFeed = rowFeeds.get(i);
         vh.titleTv.setText(currentRowFeed.getTitle());
         vh.descriptionTv.setText(currentRowFeed.getDescription());
-        // picasso
 
+        // We use picasso for background image download and cache
+        Picasso.with(view.getContext()).load(currentRowFeed.getImageHref()).into(vh.imageIv);
 
         return view;
     }

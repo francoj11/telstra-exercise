@@ -6,8 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.francojaramillo.telstraexercise.contracts.IFeedContract;
+import ar.com.francojaramillo.telstraexercise.data.RestServiceUtils;
 import ar.com.francojaramillo.telstraexercise.data.entities.Feed;
 import ar.com.francojaramillo.telstraexercise.data.entities.RowFeed;
+import ar.com.francojaramillo.telstraexercise.data.services.FeedService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by jaramillo on 28/2/18.
@@ -28,27 +33,42 @@ public class FeedPresenterImpl implements IFeedContract.IFeedPresenter {
     public void getFeed() {
         iFeedView.showLoading();
 
-        new Handler().postDelayed(new Runnable() {
+        // We create and send the Feed request
+        FeedService feedService = RestServiceUtils.getPersonaService();
+        Call<Feed> request = feedService.getFeed();
+        request.enqueue(new Callback<Feed>() {
             @Override
-            public void run() {
-                iFeedView.hideLoading();
-
-                Feed feed = new Feed();
-                feed.setTitle("Test title");
-
-                List<RowFeed> rows = new ArrayList<>();
-                for (int i = 0; i < 10; i++) {
-                    RowFeed rowFeed = new RowFeed();
-                    rowFeed.setTitle("the title");
-                    rowFeed.setDescription("the description");
-                    rowFeed.setImageHref("someling.com/image.jpg");
-
-                    rows.add(rowFeed);
-                }
-                feed.setRows(rows);
-
-                iFeedView.onSuccessfulFeed(feed);
+            public void onResponse(Call<Feed> call, Response<Feed> response) {
+                onResponseGetFeed(call, response);
             }
-        }, 2500);
+
+            @Override
+            public void onFailure(Call<Feed> call, Throwable t) {
+                onFailureGetFeed(call, t);
+            }
+        });
+    }
+
+    //##############################################################################################
+    //############################ R E T R O F I T   C A L L B A C K S #############################
+    //##############################################################################################
+
+    private void onResponseGetFeed(Call<Feed> call, Response<Feed> response) {
+        iFeedView.hideLoading();
+
+        // If the response is succesfull, we pass the feed to the View
+        if (response.isSuccessful()) {
+            iFeedView.onSuccessfulFeed(response.body());
+        } else {
+            // If an error ocurred, we notify the View
+            iFeedView.onErrorFeed();
+        }
+    }
+
+    // If an error ocurred, we notify the View
+    private void onFailureGetFeed(Call<Feed> call, Throwable t) {
+        t.printStackTrace();
+        iFeedView.hideLoading();
+        iFeedView.onErrorFeed();
     }
 }
