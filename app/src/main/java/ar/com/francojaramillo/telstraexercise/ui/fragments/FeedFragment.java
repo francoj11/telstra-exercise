@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import ar.com.francojaramillo.telstraexercise.R;
 import ar.com.francojaramillo.telstraexercise.contracts.IFeedContract;
@@ -35,6 +36,9 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
 
     // The progress indicator
     @BindView(R.id.progres_indicator_pb) ProgressBar progressIndicatorPb;
+
+    // The error information TextView
+    @BindView(R.id.error_tv) TextView errorTV;
 
     /**
      * Constructor
@@ -121,7 +125,9 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
 
     @Override
     public void onErrorFeed() {
-
+        feedLv.setVisibility(View.GONE);
+        progressIndicatorPb.setVisibility(View.GONE);
+        errorTV.setVisibility(View.VISIBLE);
     }
 
 
