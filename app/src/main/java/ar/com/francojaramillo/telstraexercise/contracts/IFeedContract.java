@@ -18,6 +18,7 @@ public interface IFeedContract {
         public void hideLoading();
         public void onSuccessfulFeed(Feed feed);
         public void onErrorFeed();
+        public void cancelPendingRequest();
     }
 
     public interface IFeedPresenter {

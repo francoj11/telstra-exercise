@@ -2,6 +2,7 @@ package ar.com.francojaramillo.telstraexercise.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -20,17 +21,26 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends AppCompatActivity implements FeedFragment.NewTitleListener {
 
+    public static final String FEED_FRAGMENT_TAG = "feedFragmentTag";
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Inicializamos ButterKnife
+        ButterKnife.bind(this);
+
+        // We set up the toolbar as the ActionBar
+        setSupportActionBar(toolbar);
 
         // If there is no savedInstanceState we add a New Fragment. In this way, if there was a
         // savedInstanceState, the fragment will preserve its state because it uses the flag
         // "retainInstance"
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
-                    FeedFragment.newInstance(), null).commit();
+                    FeedFragment.newInstance(), FEED_FRAGMENT_TAG).commit();
         }
 
     }

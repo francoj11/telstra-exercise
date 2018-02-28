@@ -138,6 +138,10 @@ public class FeedFragment extends Fragment implements IFeedContract.IFeedView {
         errorTV.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void cancelPendingRequest() {
+        iFeedPresenter.cancelPendingRequest();
+    }
 
     // #############################################################################################
     // ###################################### NewTitleListener #####################################
