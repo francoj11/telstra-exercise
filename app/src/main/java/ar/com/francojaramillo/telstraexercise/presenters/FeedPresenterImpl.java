@@ -25,10 +25,15 @@ public class FeedPresenterImpl implements IFeedContract.IFeedPresenter {
 
     private IFeedContract.IFeedView iFeedView;
 
+    private List<Call<Feed>> requestList;
     public FeedPresenterImpl(IFeedContract.IFeedView view) {
         iFeedView = view;
+        requestList = new ArrayList<>();
     }
 
+    /**
+     * Gets the feed from the Internet
+     */
     @Override
     public void getFeed() {
         iFeedView.showLoading();
@@ -36,6 +41,10 @@ public class FeedPresenterImpl implements IFeedContract.IFeedPresenter {
         // We create and send the Feed request
         FeedService feedService = RestServiceUtils.getPersonaService();
         Call<Feed> request = feedService.getFeed();
+
+        // We add the request to the requestList to have a reference for cancelling it if needed
+        requestList.add(request);
+
         request.enqueue(new Callback<Feed>() {
             @Override
             public void onResponse(Call<Feed> call, Response<Feed> response) {
@@ -47,6 +56,16 @@ public class FeedPresenterImpl implements IFeedContract.IFeedPresenter {
                 onFailureGetFeed(call, t);
             }
         });
+    }
+
+    /**
+     * Cancels all the Pending Requests
+     */
+    @Override
+    public void cancelPendingRequest() {
+        for (Call<Feed> request : requestList) {
+            request.cancel();
+        }
     }
 
     //##############################################################################################

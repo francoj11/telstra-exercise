@@ -22,6 +22,7 @@ public interface IFeedContract {
 
     public interface IFeedPresenter {
         public void getFeed();
+        public void cancelPendingRequest();
     }
 
 }
