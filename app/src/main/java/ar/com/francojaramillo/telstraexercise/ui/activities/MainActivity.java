@@ -1,7 +1,9 @@
-package ar.com.francojaramillo.telstraexercise;
+package ar.com.francojaramillo.telstraexercise.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import ar.com.francojaramillo.telstraexercise.R;
 
 public class MainActivity extends AppCompatActivity {
 
